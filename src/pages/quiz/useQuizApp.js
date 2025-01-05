@@ -4,7 +4,7 @@ import { useQuizData } from "../../hooks/useQuizData";
 export const useQuizApp = () => {
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState({}); 
   const [showExplanation, setShowExplanation] = useState(false);
   const [isAnswerChecked, setIsAnswerChecked] = useState(false);
 
@@ -17,11 +17,14 @@ export const useQuizApp = () => {
   }, [data]);
 
   const handleOptionSelect = (option) => {
-    setSelectedOption(option);
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [currentQuestionIndex]: option, 
+    }));
   };
 
   const handleExplanationToggle = () => {
-    if (selectedOption) {
+    if (selectedOptions[currentQuestionIndex]) {
       setShowExplanation(true);
       setIsAnswerChecked(true);
     } else {
@@ -32,7 +35,6 @@ export const useQuizApp = () => {
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption(null);
       setShowExplanation(false);
       setIsAnswerChecked(false);
     }
@@ -41,7 +43,6 @@ export const useQuizApp = () => {
   const handlePrevQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setSelectedOption(null);
       setShowExplanation(false);
       setIsAnswerChecked(false);
     }
@@ -53,7 +54,7 @@ export const useQuizApp = () => {
   return {
     questions,
     currentQuestionIndex,
-    selectedOption,
+    selectedOption: selectedOptions[currentQuestionIndex], 
     showExplanation,
     isAnswerChecked,
     handleOptionSelect,

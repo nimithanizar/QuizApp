@@ -18,7 +18,6 @@ const QuizApp = () => {
     error,
   } = useQuizApp();
 
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -26,7 +25,6 @@ const QuizApp = () => {
       </div>
     );
   }
-
 
   if (error) {
     return (
@@ -53,7 +51,7 @@ const QuizApp = () => {
               Quiz Title
             </h2>
 
-            <div className="border rounded-lg p-4 mb-6">
+            <div className="bg-white shadow-lg rounded-lg p-6 mb-6 border-4 border-blue-500">
               <p className="text-gray-700">{currentQuestion.question}</p>
             </div>
 
@@ -67,8 +65,8 @@ const QuizApp = () => {
                       selectedOption === option
                         ? isAnswerChecked
                           ? option === currentQuestion.correctAnswer
-                            ? "bg-green-100"
-                            : "bg-red-100"
+                            ? "bg-darkGreen text-white"
+                            : "bg-darkRed text-white"
                           : "bg-blue-100"
                         : "hover:bg-gray-50"
                     }`}
@@ -93,12 +91,25 @@ const QuizApp = () => {
               </button>
             </div>
 
-            {showExplanation && (
-              <div className="border rounded-lg p-4 transition-all duration-300">
-                <h3 className="font-semibold mb-2">Explanation</h3>
-                <p className="text-gray-700">{currentQuestion.explanation}</p>
-              </div>
-            )}
+            <div
+              onClick={handleExplanationToggle}
+              className="bg-white shadow-lg rounded-lg p-4 mt-6 cursor-pointer"
+            >
+              <h3 className="font-semibold mb-2 text-gray-800">Explanation</h3>
+              {showExplanation && (
+                <p
+                  className={`text-gray-700 ${
+                    isAnswerChecked
+                      ? selectedOption === currentQuestion.correctAnswer
+                        ? "text-green-500"
+                        : "text-red-500"
+                      : ""
+                  }`}
+                >
+                  {currentQuestion.explanation}
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="bg-white rounded-lg shadow-lg p-6 w-72">
@@ -108,6 +119,7 @@ const QuizApp = () => {
                   <span className="text-gray-600">
                     Question {currentQuestionIndex + 1}/{questions.length}
                   </span>
+
                   <button
                     onClick={handleExplanationToggle}
                     className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-md"
